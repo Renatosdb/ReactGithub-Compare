@@ -1,33 +1,50 @@
 import React from 'react';
+import propTypes from 'prop-types';
 
-import { Container, Repository } from './syles';
+import { Container, Repository } from './styles';
 
-const CompareList = () => (
-
+const CompareList = ({ repositories }) => (
     <Container>
-        <Repository>
-            <header>
-                <img src="https://avatars3.githubusercontent.com/u/69631?v=4" alt="Facebook" />
-                <strong>React</strong>
-                <small>Facebook</small>
-            </header>
+        { repositories.map(repository => (
+            <Repository key={repository.id}>
+                <header>
+                    <img src={repository.owner.avatar_url}  alt={repository.owner.login} />
+                    <strong>{repository.name}</strong>
+                    <small>{repository.owner.login} </small>
+                </header>
 
-            <ul>
-                <li>
-                    95,019 <small>stars</small>
-                </li>
-                <li>
-                    95,019 <small>forks</small>
-                </li>
-                <li>
-                    95,019 <small>issues</small>
-                </li>
-                <li>
-                    3 days ago <small>last commit</small>
-                </li>
-            </ul>
-        </Repository>
-    </Container>
+                <ul>
+                    <li>
+                        {repository.stargazers_count} <small>stars</small>
+                    </li>
+                    <li>
+                        {repository.forks_count} <small>forks</small>
+                    </li>
+                    <li>
+                        {repository.open_issue_count} <small>issues</small>
+                    </li>
+                    <li>
+                        {repository.lastCommit} <small>last commit</small>
+                    </li>
+                </ul>
+        </ Repository>
+        )) }
+    </ Container>
 );
+
+CompareList.propTypes = {
+    repositories: propTypes.arrayOf(propTypes.shape({
+        id: propTypes.number,
+        name: propTypes.string,
+        owner: propTypes.shape({
+            login: propTypes.string,
+            avatar_url: propTypes.string,
+        }),
+        stargazers_count: propTypes.number,
+        forks_count: propTypes.number,
+        open_issue_count: propTypes.number,
+        pushed_at: propTypes.string,
+    })).isRequired,
+};
 
 export default CompareList;
